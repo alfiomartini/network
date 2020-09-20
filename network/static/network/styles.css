@@ -1,0 +1,30 @@
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+body{
+  padding: 20px;
+}
+
+/* Form New Post */
+
+#form-post{
+  margin: 10px;
+  padding: 20px;
+  border: 1px solid black;
+  border-radius: 5px;
+}
+/* Posts */
+
+.post-wrapper{
+  margin: 10px;
+  padding: 20px;
+  border: 1px solid black;
+  border-radius: 5px;
+}
+
+.post-wrapper .edit{
+  display: block;
+}

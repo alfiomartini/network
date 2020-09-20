@@ -21,7 +21,12 @@
         <div>{{post.post_text}}</div>
         <div>{{post.date}}</div>
         <div>
-            {{post.count}}
+            {% if request.user in post.liked_by_all %}
+                <button class="like-btn" id="post.id">Unlike</button>
+            {% else %}
+                <button class="like-btn" id="post.id">Like</button>
+            {% endif %}
+            {{post.likes_count}}
         </div>
         <div>Comment</div>
     </div>
@@ -32,14 +37,27 @@
 <script src="{% static 'network/getCookie.js' %}"></script>
 
 <script>
-    // script for processing editing of posts
     addEventListener('DOMContentLoaded', listeners);
 
     function listeners(){
-        edit = document.querySelector('.edit');
-        if (edit){
-            edit.addEventListener('click', processEdit);
-        }
+
+        // processing likes and unlikes
+        like_buttons = document.querySelectorAll('.like-btn')
+        like_buttons.forEach(button => {
+            button.addEventListener('click', processLike)
+        });
+
+         // script for processing editing of posts
+        edit_links = document.querySelectorAll('.edit');
+        edit_links.forEach(link => {
+            link.addEventListener('click', processEdit);
+        });       
+    }
+
+    function processLike(){
+        let button_text = this.innerHTML;
+        let post_id = this.id
+        console.log(post_id, button_text);
     }
 
     function processEdit(event){

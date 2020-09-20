@@ -12,6 +12,7 @@ class User(AbstractUser):
     def __str__(self):
         return self.username
 
+
 class Post(models.Model):
     id = models.AutoField(primary_key=True)
     post_text = models.CharField(max_length=140)
@@ -22,8 +23,11 @@ class Post(models.Model):
     def __str__(self):
         return self.post_text
 
-    def count(self):
+    def likes_count(self):
         return self.liked_by.all().count()
+    
+    def liked_by_all(self):
+        return self.liked_by.all()
 
 class Comment(models.Model):
     id = models.AutoField(primary_key=True)

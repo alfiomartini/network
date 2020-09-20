@@ -28,3 +28,25 @@ body{
 .post-wrapper .edit{
   display: block;
 }
+
+ /* Buttons */
+
+ .like-btn{
+  display: inline-block;
+  text-decoration: none;
+  color:whitesmoke;
+  font-size: 12px;
+  background-color: blue;
+  padding: 4px 12px;
+  border: none;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  margin-top:10px;
+  margin-right:5px;
+}
+
+.like-btn:hover{
+  background-color: darkblue;
+  color: whitesmoke;
+  text-decoration: none;
+} 

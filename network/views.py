@@ -18,9 +18,10 @@ def index(request):
         # print('username', user.username)
         # print('following', user.following.all())
         # print('followed by', user.followers.all())
+        # print('date joined', user.date_joined)
         posts = Post.objects.order_by('-date').all()
-        for post in posts:
-            print(post.id, post.liked_by.all())
+        # for post in posts:
+        #     print(post.id, post.liked_by.all())
         # print(posts)
         return render(request, "network/index.html", {'posts':posts})
     else:

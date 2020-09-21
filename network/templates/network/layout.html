@@ -4,15 +4,34 @@
 <html lang="en">
     <head>
         <title>{% block title %}Social Network{% endblock %}</title>
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+         <!-- Latest compiled and minified CSS -->
+         <link rel="stylesheet" 
+         href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" defer>
+         
+        <!-- jQuery library -->
+        <script 
+            src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js" defer>
+        </script>
+        
+        <!-- Latest compiled JavaScript -->
+        <script 
+            src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" defer>
+        </script>
+
         <link href="{% static 'network/styles.css' %}" rel="stylesheet">
     </head>
     <body>
 
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <nav class="navbar navbar-expand-md navbar-light bg-light">
             <a class="navbar-brand" href="{% url 'index' %}">Network</a>
-          
-            <div>
+            <!-- Toggler/collapsibe Button -->
+            <button class="navbar-toggler" type="button" data-toggle="collapse" 
+                 data-target="#target">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <!-- Navbar links -->
+            <div class="collapse navbar-collapse" id="target">
               <ul class="navbar-nav mr-auto">
                 {% if user.is_authenticated %}
                     <li class="nav-item">
@@ -39,7 +58,7 @@
                 {% endif %}
               </ul>
             </div>
-          </nav>
+        </nav>
         
         <div class="body">
             {% block body %}

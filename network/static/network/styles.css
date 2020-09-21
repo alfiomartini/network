@@ -25,9 +25,9 @@ body{
   border-radius: 5px;
 }
 
-.post-wrapper .edit{
+/* .post-wrapper .edit{
   display: block;
-}
+} */
 
  /* Buttons */
 
@@ -47,6 +47,25 @@ body{
 
 .like-btn:hover{
   background-color: darkblue;
+  color: whitesmoke;
+  text-decoration: none;
+} 
+
+.edit-btn{
+  margin-top: 10px;
+  margin-bottom:5px;
+  display: inline-block;
+  text-decoration: none;
+  color: whitesmoke;
+  font-size: 12px;
+  background-color: #333333;
+  padding: 4px 12px;
+  border: none;
+  border-radius: 5px;
+}
+
+.edit-btn:hover{
+  background-color: navy;
   color: whitesmoke;
   text-decoration: none;
 } 

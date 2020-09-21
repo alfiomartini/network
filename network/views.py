@@ -38,14 +38,35 @@ def new_post(request):
         return redirect('index')
 
 @login_required
-def update_post(request, post_id):
-    if request.method == 'PUT':
+def update_post(request, post_id, action):
+    if request.method == 'PUT' and action == 'edit':
         post = Post.objects.get(id=post_id)
         data = json.loads(request.body)
         post.post_text = data['newText']
         post.save()
         # return JsonResponse({"success": "Post text updated"})
         return HttpResponse('Success: Post text updated')
+    elif request.method == 'PUT' and action == 'likes':
+        user = request.user;
+        post = Post.objects.get(id=post_id)
+        data = json.loads(request.body)
+        action = data['action']
+        if action == 'Unlike':
+            # remove posts liked by the user
+            post.liked_by.remove(user)
+            # compute the new number of likes and send a json response
+            response = {'likes_count': post.liked_by.all().count(),
+                        'next_action': 'Like',
+                        'message': 'Success - Unlike processed'}
+            return JsonResponse(response)
+        elif action == 'Like':
+            # add posts liked by the user
+            post.liked_by.add(user)
+             # compute the new number of likes and send a json response
+            response = {'likes_count': post.liked_by.all().count(),
+                        'next_action': 'Unlike',
+                        'message': 'Success - Like processed'}
+            return JsonResponse(response)
     else:
         return HttpResponseBadRequest("Error: PUT request required.")
 

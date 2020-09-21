@@ -16,17 +16,17 @@
     <div class="post-wrapper">
         <h5 >{{post.user}}</h5>
         {% if request.user == post.user %}
-            <a href="#" class="edit" data-post ='{{post.id}}'>Edit</a>
+            <a href="#" class="edit edit-btn" data-post ='{{post.id}}'>Edit</a>
         {% endif %}
         <div>{{post.post_text}}</div>
         <div>{{post.date}}</div>
         <div>
             {% if request.user in post.liked_by_all %}
-                <button class="like-btn" id="post.id">Unlike</button>
+                <button class="like-btn" id="{{post.id}}">Unlike</button>
             {% else %}
-                <button class="like-btn" id="post.id">Like</button>
+                <button class="like-btn" id="{{post.id}}">Like</button>
             {% endif %}
-            {{post.likes_count}}
+                <span class="counter" data-counter="{{post_id}}">{{post.likes_count}}</span>
         </div>
         <div>Comment</div>
     </div>
@@ -55,9 +55,41 @@
     }
 
     function processLike(){
+        let button = this;
         let button_text = this.innerHTML;
         let post_id = this.id
         console.log(post_id, button_text);
+
+        // update database
+        let csrftoken = getCookie('csrftoken');
+        fetch(`/update/${post_id}/likes`, {
+            method:'PUT',
+            headers: {
+            "X-CSRFToken": csrftoken,
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+            },
+            credentials: 'same-origin',
+            body: JSON.stringify({action:button_text})
+        })
+        .then(response => {
+            // console.log(response.status);
+            return response.json();
+        })
+        .then(data => {
+            console.log(data);
+            if ('likes_count' in data){
+                    // update number of likes
+                    let count = data['likes_count'];
+                    let counter_elem =  button.nextElementSibling;
+                    counter_elem.innerHTML = count;
+                    // update button text
+                    button.innerHTML = data['next_action'];
+                }
+        })
+        .catch(error => {
+            console.log(error);
+        });
     }
 
     function processEdit(event){
@@ -74,7 +106,7 @@
             post.innerHTML = textarea.value;
             // update database
             let csrftoken = getCookie('csrftoken');
-            fetch(`/update/${post_id}`, {
+            fetch(`/update/${post_id}/edit`, {
                 method:'PUT',
                 headers: {
                 "X-CSRFToken": csrftoken,
@@ -85,7 +117,7 @@
                 body: JSON.stringify({newText:post.innerHTML})
             })
             .then(response => {
-                console.log(response.status);
+                // console.log(response.status);
                 return response.text();
             })
             .then(data => {

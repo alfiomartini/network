@@ -1,0 +1,64 @@
+{% extends 'network/layout.html' %}
+
+{% load static %}
+
+{% block body %}
+<div class="user-data">
+  <h4 class="m-3">{{post_user.username}}</h4>
+  {% if post_user != request.user %}
+    {% if request.user in following %}
+      <a class="follow-btn" href="#">Unfollow</a>
+    {% else %}
+      <a class="follow-btn" href="#">Follow</a>
+    {% endif %}
+  {% endif %}
+  <div class="font-weight-bold ml-3">Joined {{post_user.date_joined}}</div>
+  <p class="ml-3">
+    <span class="user-network font-weight-bold ">Following 
+    </span> 
+     {{post_user.following_count}} 
+     <span class="user-network font-weight-bold ml-3">Followers </span> {{post_user.followers_count}}
+  </p>
+</div>
+
+<div class="flex-profile">
+  <div class="user-posts">
+    {% for post in user_posts %}
+    <div class="post-wrapper">
+        <h5 ><a href="{% url 'profile' post.id %}">{{post.user}}</a></h5>
+        {% if request.user == post.user %}
+            <a href="#" class="edit edit-btn" data-post ='{{post.id}}'>Edit</a>
+        {% endif %}
+        <div>{{post.post_text}}</div>
+        <div>{{post.date}}</div>
+        <div>
+            {% if post_user in post.liked_by_all %}
+                <button class="like-btn" id="{{post.id}}">Unlike</button>
+            {% else %}
+                <button class="like-btn" id="{{post.id}}">Like</button>
+            {% endif %}
+            <span class="counter" data-counter="{{post_id}}">{{post.likes_count}}</span>
+        </div>
+        <div>Comment</div>
+    </div>
+    {% endfor %}
+  </div>
+  <!-- <div class="users-list">
+    <h4>Follow/Unfollow</h4>
+    {% for user_ in users %}
+      <div class="flex-follow">
+        <h5>{{user_.username}}</h5>
+        {% if user_ in following %}
+          <a class="follow-btn" href="#">Unfollow</a>
+        {% else %}
+          <a class="follow-btn" href="#">Follow</a>
+        {% endif %}
+      </div> 
+    {% endfor %}
+  </div> -->
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}

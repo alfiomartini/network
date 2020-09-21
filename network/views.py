@@ -27,6 +27,24 @@ def index(request):
     else:
         return redirect('login')
 
+# Profile
+
+@login_required
+def profile(request, post_id):
+    post = Post.objects.get(id = post_id)
+    post_user = post.user
+    print('post user', post_user)
+    print('current user', request.user)
+    user_posts = Post.objects.filter(user=post_user).order_by('-date')
+    followers = post_user.followers.all()
+    following = post_user.following.all()
+    # other users = all users except the current logged in user
+    # other_users = User.objects.exclude(username=request.user.username).all()
+    # print('followers', followers)
+    # print('following', following)
+    context = {'followers':followers, 'following':following, 
+               'post_user':post_user, 'user_posts': user_posts}
+    return render(request, 'network/profile.html', context)
 # Posts Views
 
 @login_required

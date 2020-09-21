@@ -14,7 +14,7 @@
     <h3 class="m-3">All Posts</h3>
     {% for post in posts %}
     <div class="post-wrapper">
-        <h5 >{{post.user}}</h5>
+        <h5 ><a href="{% url 'profile' post.id %}">{{post.user}}</a></h5>
         {% if request.user == post.user %}
             <a href="#" class="edit edit-btn" data-post ='{{post.id}}'>Edit</a>
         {% endif %}

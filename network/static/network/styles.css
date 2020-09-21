@@ -23,11 +23,10 @@ body{
   padding: 20px;
   border: 1px solid black;
   border-radius: 5px;
+  min-width: 400px;
 }
 
-/* .post-wrapper .edit{
-  display: block;
-} */
+ 
 
  /* Buttons */
 
@@ -69,3 +68,59 @@ body{
   color: whitesmoke;
   text-decoration: none;
 } 
+
+.follow-btn{
+  margin-top: 10px;
+  margin-bottom:5px;
+  display: inline-block;
+  text-decoration: none;
+  color: whitesmoke;
+  font-size: 16px;
+  background-color: #333333;
+  padding: 4px 12px;
+  border: none;
+  border-radius: 5px;
+}
+
+.follow-btn:hover{
+  background-color: navy;
+  color: whitesmoke;
+  text-decoration: none;
+}
+
+/* Profile Page */
+
+.user-data h4{
+  font-family: Arial, Helvetica, sans-serif;
+  display: inline-block;
+}
+
+/* .flex-profile{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  flex-wrap: wrap;
+} */
+
+.users-list{
+  padding: 20px;
+}
+
+.flex-follow{
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.flex-follow h5{
+  margin-right: 50px;
+}
+
+/* Media Queries */
+
+@media (max-width:500px){
+  .post-wrapper{
+    min-width: 350px;
+    max-width: 350px;
+  }
+}

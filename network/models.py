@@ -12,6 +12,12 @@ class User(AbstractUser):
     def __str__(self):
         return self.username
 
+    def following_count(self):
+        return self.following.all().count()
+
+    def followers_count(self):
+        return self.followers.all().count()
+
 
 class Post(models.Model):
     id = models.AutoField(primary_key=True)

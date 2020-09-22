@@ -15,9 +15,9 @@ from .models import User, Post, PostForm, UserForm
 def index(request):
     if request.user.is_authenticated:
         user = request.user
-        # print('username', user.username)
-        # print('following', user.following.all())
-        # print('followed by', user.followers.all())
+        print('username', user.username)
+        print('following', user.following.all())
+        print('followed by', user.followers.all())
         # print('date joined', user.date_joined)
         posts = Post.objects.order_by('-date').all()
         # for post in posts:
@@ -33,15 +33,9 @@ def index(request):
 def profile(request, post_id):
     post = Post.objects.get(id = post_id)
     post_user = post.user
-    print('post user', post_user)
-    print('current user', request.user)
     user_posts = Post.objects.filter(user=post_user).order_by('-date')
     followers = post_user.followers.all()
     following = post_user.following.all()
-    # other users = all users except the current logged in user
-    # other_users = User.objects.exclude(username=request.user.username).all()
-    # print('followers', followers)
-    # print('following', following)
     context = {'followers':followers, 'following':following, 
                'post_user':post_user, 'user_posts': user_posts}
     return render(request, 'network/profile.html', context)
@@ -89,6 +83,23 @@ def update_post(request, post_id, action):
     else:
         return HttpResponseBadRequest("Error: PUT request required.")
 
+@login_required
+def update_user(request, user_id, action):
+    if request.method == 'PUT' and action == 'follow':
+        current_user = request.user;
+        user = User.objects.get(id=user_id)
+        print('user to be processed', user.username)
+        data = json.loads(request.body)
+        action = data['action']
+        if action == 'Follow' and current_user != user:
+            # print(f'add {user} from {current_user} following set')
+            current_user.following.add(user)
+        elif action == 'Unfollow' and current_user != user:
+            # print(f'remove {user} from {current_user} following set')
+            current_user.following.remove(user)
+        return HttpResponse('Success: Post following set updated')
+    else:
+        return HttpResponseBadRequest("Error: PUT request required.")
 
 # Authentication Views
 

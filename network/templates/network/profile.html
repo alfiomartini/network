@@ -6,10 +6,10 @@
 <div class="user-data">
   <h4 class="m-3">{{post_user.username}}</h4>
   {% if post_user != request.user %}
-    {% if request.user in following %}
-      <a class="follow-btn" href="#">Unfollow</a>
+    {% if post_user in request.user.following_all %}
+      <a class="follow-btn" href="#" id="{{post_user.id}}">Unfollow</a>
     {% else %}
-      <a class="follow-btn" href="#">Follow</a>
+      <a class="follow-btn" href="#" id="{{post_user.id}}">Follow</a>
     {% endif %}
   {% endif %}
   <div class=" ml-3">Joined {{post_user.date_joined}}</div>
@@ -61,4 +61,53 @@
 {% endblock %}
 
 {% block scripts %}
+<script src="{% static 'network/getCookie.js' %}"></script>
+<script>
+addEventListener('DOMContentLoaded', listeners);
+
+function listeners(){
+
+    // processing likes and unlikes
+    let follow_btn = document.querySelector('.follow-btn')
+    if (follow_btn){
+      follow_btn.addEventListener('click', processFollow);
+    }   
+}
+
+function processFollow(){
+  let button = this;
+  let action = button.innerHTML;
+  let user_id = button.id
+  console.log(action);
+  console.log(user_id)
+  // update database
+  let csrftoken = getCookie('csrftoken');
+  fetch(`/update/user/${user_id}/follow`, {
+      method:'PUT',
+      headers: {
+      "X-CSRFToken": csrftoken,
+      "Accept": "application/json",
+      "Content-Type": "application/json"
+      },
+      credentials: 'same-origin',
+      body: JSON.stringify({action:action})
+  })
+  .then(response => {
+      // console.log(response.status);
+      if (action === 'Unfollow'){
+        button.innerHTML = 'Follow';
+      }
+      else{
+        button.innerHTML = 'Unfollow';
+      }
+      return response.text();
+  })
+  .then(data => {
+      console.log(data);
+  })
+  .catch(error => {
+      console.log(error);
+  });
+}
+</script>
 {% endblock %}

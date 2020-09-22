@@ -42,13 +42,13 @@
     function listeners(){
 
         // processing likes and unlikes
-        like_buttons = document.querySelectorAll('.like-btn')
+        let like_buttons = document.querySelectorAll('.like-btn')
         like_buttons.forEach(button => {
             button.addEventListener('click', processLike)
         });
 
          // script for processing editing of posts
-        edit_links = document.querySelectorAll('.edit');
+        let edit_links = document.querySelectorAll('.edit');
         edit_links.forEach(link => {
             link.addEventListener('click', processEdit);
         });       

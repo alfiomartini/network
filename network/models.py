@@ -12,6 +12,9 @@ class User(AbstractUser):
     def __str__(self):
         return self.username
 
+    def following_all(self):
+        return self.following.all();
+
     def following_count(self):
         return self.following.all().count()
 

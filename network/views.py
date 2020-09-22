@@ -30,9 +30,8 @@ def index(request):
 # Profile
 
 @login_required
-def profile(request, post_id):
-    post = Post.objects.get(id = post_id)
-    post_user = post.user
+def profile(request, user_id):
+    post_user = User.objects.get(id=user_id)
     user_posts = Post.objects.filter(user=post_user).order_by('-date')
     followers = post_user.followers.all()
     following = post_user.following.all()

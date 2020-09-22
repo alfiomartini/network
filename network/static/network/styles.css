@@ -8,6 +8,8 @@ body{
   padding: 20px;
 }
 
+/* Navbar */
+
 /* Form New Post */
 
 #form-post{
@@ -90,6 +92,14 @@ body{
 
 /* Profile Page */
 
+.user-data{
+  border: 1px solid black;
+  margin:10px;
+  padding: 20px;
+  background-color: lightblue;
+  color: black;
+  font-variant: small-caps;
+}
 .user-data h4{
   font-family: Arial, Helvetica, sans-serif;
   display: inline-block;
@@ -118,9 +128,9 @@ body{
 
 /* Media Queries */
 
-@media (max-width:500px){
+/* @media (max-width:500px){
   .post-wrapper{
     min-width: 350px;
     max-width: 350px;
   }
-}
+} */

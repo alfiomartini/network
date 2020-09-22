@@ -24,9 +24,9 @@ class User(AbstractUser):
 
 class Post(models.Model):
     id = models.AutoField(primary_key=True)
-    post_text = models.CharField(max_length=140)
+    post_text = models.CharField(max_length=500)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_posts')
-    liked_by = models.ManyToManyField(User, related_name='user_liked_posts')
+    liked_by = models.ManyToManyField(User, related_name='user_liked_posts', blank=True)
     date = models.DateTimeField(default=timezone.now)
 
     def __str__(self):

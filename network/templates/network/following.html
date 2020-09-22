@@ -3,15 +3,7 @@
 {% load static %}
 
 {% block body %}
-    <form action="{% url 'new_post' %}" id='form-post' class="mt-3" method="POST">
-        {% csrf_token %}
-        <div class="form-group">
-            <label for="new_post" class="text-dark">New Post</label>
-            <input class="form-control" type="text" name="new_post" id="new_post" maxlength="500">
-        </div>
-        <input class="btn btn-secondary" type="submit" value="Post">
-    </form>
-    <h3 class="m-3">All Posts</h3>
+    <h3 class="m-3">Following's Posts</h3>
     {% for post in posts %}
     <div class="post-wrapper">
         <h5 ><a href="{% url 'profile' post.user.id %}">{{post.user}}</a></h5>

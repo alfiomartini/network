@@ -15,17 +15,33 @@ from .models import User, Post, PostForm, UserForm
 def index(request):
     if request.user.is_authenticated:
         user = request.user
-        print('username', user.username)
-        print('following', user.following.all())
-        print('followed by', user.followers.all())
+        # print('username', user.username)
+        # print('following', user.following.all())
+        # print('followed by', user.followers.all())
         # print('date joined', user.date_joined)
         posts = Post.objects.order_by('-date').all()
-        # for post in posts:
-        #     print(post.id, post.liked_by.all())
-        # print(posts)
         return render(request, "network/index.html", {'posts':posts})
     else:
         return redirect('login')
+
+# Following
+
+@login_required
+def following(request, user_id):
+    user = User.objects.get(id=user_id)
+    following_users = user.following.all()
+    # post_list = [user.user_posts.all() for user in following_users]
+    # print(post_list)
+    post_id_list = []
+    for user in following_users:
+        post_ids = [post.id for post in user.user_posts.all()]
+        post_id_list += post_ids
+    # print(post_id_list)
+    posts = Post.objects.filter(id__in=post_id_list).order_by('-date')
+    # print(posts)
+    # return redirect('index')
+    return render(request, 'network/following.html', {'posts':posts})
+
 
 # Profile
 

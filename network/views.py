@@ -5,11 +5,12 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 import json
+from dateutil import tz
 
 
 # Create your views here.
 
-from .models import User, Post, PostForm, UserForm
+from .models import User, Post, Comment, PostForm, UserForm
 
 
 def index(request):
@@ -36,10 +37,7 @@ def following(request, user_id):
     for user in following_users:
         post_ids = [post.id for post in user.user_posts.all()]
         post_id_list += post_ids
-    # print(post_id_list)
     posts = Post.objects.filter(id__in=post_id_list).order_by('-date')
-    # print(posts)
-    # return redirect('index')
     return render(request, 'network/following.html', {'posts':posts})
 
 
@@ -54,7 +52,35 @@ def profile(request, user_id):
     context = {'followers':followers, 'following':following, 
                'post_user':post_user, 'user_posts': user_posts}
     return render(request, 'network/profile.html', context)
-# Posts Views
+
+# Post Comments
+@login_required
+def comments(request, post_id):
+    post = Post.objects.get(id=post_id)
+    comments = post.post_comments.all()
+    to_zone = tz.tzlocal()
+    comment_list = [{'id':comment.id, 
+                    'text':comment.text, 
+                    'date':comment.date.astimezone(tz.tzlocal()),
+                    'post':comment.to_post.id} for comment in comments]
+    # print(comment_list)
+    response = JsonResponse(comment_list, safe=False)
+    return redirect('index')
+
+# Post Actions
+
+@login_required
+def add_comment(request, post_id):
+    if request.method == 'POST':
+        body = json.loads(request.body)
+        text = body['comment']
+        # print(post_id)
+        post = Post.objects.get(id=post_id)
+        Comment.objects.create(text=text, to_post=post);
+        comment_list = list(Comment.objects.filter(to_post=post_id))
+        last_comment = comment_list[-1]
+        return JsonResponse({'message': 'Success: Comment added to post',
+                             'date': last_comment.date})
 
 @login_required
 def new_post(request):

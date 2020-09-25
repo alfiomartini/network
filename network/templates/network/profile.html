@@ -27,7 +27,7 @@
     {% if request.user == post.user %}
         <a href="#" class="edit edit-btn" data-post ='{{post.id}}'>Edit</a>
     {% endif %}
-    <div>{{post.post_text}}</div>
+    <div class="post-text-{{post.id}}">{{post.post_text}}</div>
     <div>{{post.date}}</div>
     <div>
         {% if post_user in post.liked_by_all %}
@@ -93,4 +93,5 @@ function processFollow(){
   });
 }
 </script>
+<script src="{% static 'network/post.js' %}"></script>
 {% endblock %}

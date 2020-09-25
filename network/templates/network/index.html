@@ -18,7 +18,7 @@
         {% if request.user == post.user %}
             <a href="#" class="edit edit-btn" data-post ='{{post.id}}'>Edit</a>
         {% endif %}
-        <div>{{post.post_text}}</div>
+        <div class="post-text-{{post.id}}">{{post.post_text}}</div>
         <div>{{post.date}}</div>
         <div>
             {% if request.user in post.liked_by_all %}
@@ -28,105 +28,145 @@
             {% endif %}
                 <span class="counter" data-counter="{{post_id}}">{{post.likes_count}}</span>
         </div>
-        <div>Comment</div>
+        <div class="mb-2"><a class="edit-btn comments-btn mr-2" href="#" data-post={{post.id}}>
+            Comments</a><span>{{post.comments_count}}</span></div>
+        <div class="comment-wrapper">
+            <form action="" id="form-comment" method="post">
+                {% csrf_token %}
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" placeholder="Comment" aria-label="Comment" aria-describedby="basic-addon2" name='comment' minlength="1" data-post ="{{post.id}}">
+                    <div class="input-group-append">
+                      <button class="btn btn-primary" type="button" 
+                      id="post-btn">Post</button>
+                    </div>
+                </div>
+            </form>
+            <ul class="comment-list-{{post.id}} show-comments">
+                {% for comment in post.comments %}
+                 <div class="comment-item">
+                    <li class="comment-item-{{post.id}}-{{comment.id}}">
+                        <span>({{comment.new_date}}) </span>{{comment.text}}
+                    </li>
+                    {% if post.user == request.user %}
+                        <div><a class="del-btn del-btn" href="#" 
+                            data-post="{{post.id}}" data-comment="{{comment.id}}">
+                            delete
+                            </a>
+                        </div>
+                    {% endif %}
+                 </div>
+                    
+                {% endfor %}
+            </ul>
+        </div>
     </div>
     {% endfor %}
 {% endblock %}
 
 {% block scripts %}
-<script src="{% static 'network/getCookie.js' %}"></script>
-
 <script>
-    addEventListener('DOMContentLoaded', listeners);
+addEventListener('DOMContentLoaded', comments);
 
-    function listeners(){
+function comments(){
+    let comment_btn = document.querySelectorAll('.comments-btn');
+    comment_btn. forEach(btn => {
+        btn.addEventListener('click', displayComments);
+    });
 
-        // processing likes and unlikes
-        let like_buttons = document.querySelectorAll('.like-btn')
-        like_buttons.forEach(button => {
-            button.addEventListener('click', processLike)
-        });
+    let post_btn = document.getElementById('post-btn');
+    post_btn.addEventListener('click', commentForm);
 
-         // script for processing editing of posts
-        let edit_links = document.querySelectorAll('.edit');
-        edit_links.forEach(link => {
-            link.addEventListener('click', processEdit);
-        });       
-    }
+    let del_btn = document.querySelectorAll('.del-btn');
+    del_btn.forEach(btn => {
+        if (btn)
+            btn.addEventListener('click', delComment);
+    });
 
-    function processLike(){
-        let button = this;
-        let button_text = this.innerHTML;
-        let post_id = this.id
-        console.log(post_id, button_text);
-
-        // update database
-        let csrftoken = getCookie('csrftoken');
-        fetch(`/update/${post_id}/likes`, {
-            method:'PUT',
-            headers: {
-            "X-CSRFToken": csrftoken,
-            "Accept": "application/json",
-            "Content-Type": "application/json"
-            },
-            credentials: 'same-origin',
-            body: JSON.stringify({action:button_text})
-        })
-        .then(response => {
-            // console.log(response.status);
-            return response.json();
-        })
-        .then(data => {
-            console.log(data);
-            if ('likes_count' in data){
-                    // update number of likes
-                    let count = data['likes_count'];
-                    let counter_elem =  button.nextElementSibling;
-                    counter_elem.innerHTML = count;
-                    // update button text
-                    button.innerHTML = data['next_action'];
-                }
-        })
-        .catch(error => {
-            console.log(error);
-        });
-    }
-
-    function processEdit(event){
+    function delComment(event){
         event.preventDefault();
-        // 'this' is the anchor 'edit' element
+        console.log(this);
         let post_id = this.dataset.post;
-        // post is the 'div' next to it
-        let post = this.nextElementSibling;
-        let post_text = post.innerHTML;
-        post.innerHTML = '';
-        post.innerHTML = `<textarea rows="2" cols="100">${post_text}</textarea>`;
-        let textarea = document.querySelector('textarea');
-        textarea.addEventListener('change', function(event){
-            post.innerHTML = textarea.value;
-            // update database
+        let comment_id = this.dataset.comment;
+        console.log('post_id', post_id);
+        console.log('comment_id', comment_id);
+        let comment = document.querySelector(`.comment-item-${post_id}-${comment_id}`);
+        console.log(comment);
+    }
+
+    function commentForm(event){
+        event.preventDefault();
+        let input = document.querySelector('input[name = "comment"]');
+        let post_id = input.dataset.post;
+        let value = input.value
+        input.value='';
+        if (value.length > 0){
             let csrftoken = getCookie('csrftoken');
-            fetch(`/update/${post_id}/edit`, {
-                method:'PUT',
+            fetch(`/comments/add/${post_id}`, {
+                method:'POST',
                 headers: {
                 "X-CSRFToken": csrftoken,
                 "Accept": "application/json",
                 "Content-Type": "application/json"
                 },
                 credentials: 'same-origin',
-                body: JSON.stringify({newText:post.innerHTML})
+                body: JSON.stringify({comment:value})
             })
             .then(response => {
-                // console.log(response.status);
-                return response.text();
+                return response.json();
             })
             .then(data => {
+                let months = ['Jan.', 'Feb.', 'Mar.', 'Apr.', 'May', 'Jun.', 
+                              'Jul.', 'Aug.','Sept.', 'Oct.', 'Nov.', 'Dec.']
                 console.log(data);
+                let li_item = document.createElement('li');
+                let date = new Date();
+                let hours = date.getHours();
+                let min = date.getMinutes()
+                let hours_short = hours;
+                let total_min = (hours*60) + min;
+                const twelve_hours = 12*60;
+                let pre_min = '';
+                if (min < 10){
+                    pre_min = '0'
+                }
+                let ampm = 'a.m.';
+                if (hours > 12){
+                    hours_short = hours - 12;
+                }
+                if (total_min > twelve_hours){
+                    ampm = 'p.m.';
+                }
+                let str_date = `${months[date.getMonth()]} ${date.getDate()}, 
+                                ${date.getFullYear()},
+                                ${hours_short}:${pre_min}${date.getMinutes()} ${ampm}`;
+                li_item.innerHTML = `(${str_date}) ${value}`;
+                let ul_elem = document.querySelector(`.comment-list-${post_id}`);
+                ul_elem.append(li_item);
             })
             .catch(error => {
                 console.log(error);
             });
-        });
+        }
     }
+
+    function displayComments(event){
+        event.preventDefault();
+        let post_id = this.dataset.post;
+        // console.log('postid', post_id);
+
+        let ul_elem = document.querySelector(`.comment-list-${post_id}`);
+        // console.log('ul elem', ul_elem);
+        if (ul_elem.classList.contains('hide-comments')) {
+            ul_elem.classList.remove('hide-comments');
+            ul_elem.classList.add('show-comments');
+        } else {
+            ul_elem.classList.remove('show-comments');
+            ul_elem.classList.add('hide-comments');
+        }
+    }
+}
 </script>
+<script src="{% static 'network/getCookie.js' %}"></script>
+
+<script src="{% static 'network/post.js' %}"></script>
 {% endblock %}

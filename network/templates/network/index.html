@@ -16,39 +16,43 @@
     <div class="post-wrapper">
         <h5 ><a href="{% url 'profile' post.user.id %}">{{post.user}}</a></h5>
         {% if request.user == post.user %}
-            <a href="#" class="edit edit-btn" data-post ='{{post.id}}'>Edit</a>
+            <a href="#" class="edit-btn edit-action" data-post ='{{post.id}}'>Edit</a>
         {% endif %}
         <div class="post-text-{{post.id}}">{{post.post_text}}</div>
         <div>{{post.date}}</div>
         <div>
             {% if request.user in post.liked_by_all %}
-                <button class="like-btn" id="{{post.id}}">Unlike</button>
+                <button class="like-btn like-action" id="{{post.id}}">Unlike</button>
             {% else %}
-                <button class="like-btn" id="{{post.id}}">Like</button>
+                <button class="like-btn like-action" id="{{post.id}}">Like</button>
             {% endif %}
-                <span class="counter" data-counter="{{post_id}}">{{post.likes_count}}</span>
+            <span class="counter" data-counter="{{post_id}}">{{post.likes_count}}</span>
         </div>
-        <div class="mb-2"><a class="edit-btn comments-btn mr-2" href="#" data-post={{post.id}}>
-            Comments</a><span>{{post.comments_count}}</span></div>
+        <div class="mb-2"><a class="edit-btn comments-action mr-2" href="#" data-post={{post.id}}>
+            Comments</a><span>{{post.comments_count}}</span>
+        </div>
+
         <div class="comment-wrapper">
-            <form action="" id="form-comment" method="post">
+        <!-- {% if user.request == post.user %} -->
+            <form action="" id="" method="post">
                 {% csrf_token %}
                 <div class="input-group mb-3">
-                    <input type="text" class="form-control" placeholder="Comment" aria-label="Comment" aria-describedby="basic-addon2" name='comment' minlength="1" data-post ="{{post.id}}">
+                    <input type="text" class="form-control" placeholder="Comment"  aria-describedby="basic-addon2" name='comment' minlength="1" data-post ="{{post.id}}">
                     <div class="input-group-append">
-                      <button class="btn btn-primary" type="button" 
-                      id="post-btn">Post</button>
+                      <button class="btn btn-primary post-action" type="button" 
+                      data-post="{{post.id}}">Post</button>
                     </div>
                 </div>
             </form>
-            <ul class="comment-list-{{post.id}} show-comments">
+        <!-- {% endif %} -->
+            <ul class="comment-list-{{post.id}} hide-comments">
                 {% for comment in post.comments %}
                  <div class="comment-item">
                     <li class="comment-item-{{post.id}}-{{comment.id}}">
                         <span>({{comment.new_date}}) </span>{{comment.text}}
                     </li>
                     {% if post.user == request.user %}
-                        <div><a class="del-btn del-btn" href="#" 
+                        <div><a class="del-btn del-action" href="#" 
                             data-post="{{post.id}}" data-comment="{{comment.id}}">
                             delete
                             </a>
@@ -65,104 +69,108 @@
 
 {% block scripts %}
 <script>
-addEventListener('DOMContentLoaded', comments);
+addEventListener('DOMContentLoaded', commentListeners);
 
-function comments(){
-    let comment_btn = document.querySelectorAll('.comments-btn');
-    comment_btn. forEach(btn => {
+function commentListeners(){
+    let comment_btn = document.querySelectorAll('.comments-action');
+    comment_btn.forEach(btn => {
         btn.addEventListener('click', displayComments);
     });
 
-    let post_btn = document.getElementById('post-btn');
-    post_btn.addEventListener('click', commentForm);
-
-    let del_btn = document.querySelectorAll('.del-btn');
+    let post_btn = document.querySelectorAll('.post-action');
+    post_btn.forEach(btn => {
+        addEventListener('click', commentForm);
+    });
+    let del_btn = document.querySelectorAll('.del-action');
     del_btn.forEach(btn => {
         if (btn)
             btn.addEventListener('click', delComment);
     });
+}
 
-    function delComment(event){
-        event.preventDefault();
-        console.log(this);
-        let post_id = this.dataset.post;
-        let comment_id = this.dataset.comment;
-        console.log('post_id', post_id);
-        console.log('comment_id', comment_id);
-        let comment = document.querySelector(`.comment-item-${post_id}-${comment_id}`);
-        console.log(comment);
+function delComment(event){
+    event.preventDefault();
+    console.log(this);
+    let post_id = this.dataset.post;
+    let comment_id = this.dataset.comment;
+    console.log('post_id', post_id);
+    console.log('comment_id', comment_id);
+    let comment = document.querySelector(`.comment-item-${post_id}-${comment_id}`);
+    console.log(comment);
+}
+
+function commentForm(event){
+    event.preventDefault();
+    let btn = this;
+    console.log(btn);
+    let post_id = btn.dataset.post;
+    let input = document.querySelector(`.form-comment-${post_id} input`);
+    console.log(input);
+    let value = input.value
+    input.value='';
+    if (value.length > 0){
+        let csrftoken = getCookie('csrftoken');
+        fetch(`/comments/add/${post_id}`, {
+            method:'POST',
+            headers: {
+            "X-CSRFToken": csrftoken,
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+            },
+            credentials: 'same-origin',
+            body: JSON.stringify({comment:value})
+        })
+        .then(response => {
+            return response.json();
+        })
+        .then(data => {
+            let months = ['Jan.', 'Feb.', 'Mar.', 'Apr.', 'May', 'Jun.', 
+                            'Jul.', 'Aug.','Sept.', 'Oct.', 'Nov.', 'Dec.']
+            console.log(data);
+            let li_item = document.createElement('li');
+            let date = new Date();
+            let hours = date.getHours();
+            let min = date.getMinutes()
+            let hours_short = hours;
+            let total_min = (hours*60) + min;
+            const twelve_hours = 12*60;
+            let pre_min = '';
+            if (min < 10){
+                pre_min = '0'
+            }
+            let ampm = 'a.m.';
+            if (hours > 12){
+                hours_short = hours - 12;
+            }
+            if (total_min > twelve_hours){
+                ampm = 'p.m.';
+            }
+            let str_date = `${months[date.getMonth()]} ${date.getDate()}, 
+                            ${date.getFullYear()},
+                            ${hours_short}:${pre_min}${date.getMinutes()} ${ampm}`;
+            li_item.innerHTML = `(${str_date}) ${value}`;
+            let ul_elem = document.querySelector(`.comment-list-${post_id}`);
+            ul_elem.append(li_item);
+        })
+        .catch(error => {
+            console.log(error);
+        });
     }
+}
 
-    function commentForm(event){
-        event.preventDefault();
-        let input = document.querySelector('input[name = "comment"]');
-        let post_id = input.dataset.post;
-        let value = input.value
-        input.value='';
-        if (value.length > 0){
-            let csrftoken = getCookie('csrftoken');
-            fetch(`/comments/add/${post_id}`, {
-                method:'POST',
-                headers: {
-                "X-CSRFToken": csrftoken,
-                "Accept": "application/json",
-                "Content-Type": "application/json"
-                },
-                credentials: 'same-origin',
-                body: JSON.stringify({comment:value})
-            })
-            .then(response => {
-                return response.json();
-            })
-            .then(data => {
-                let months = ['Jan.', 'Feb.', 'Mar.', 'Apr.', 'May', 'Jun.', 
-                              'Jul.', 'Aug.','Sept.', 'Oct.', 'Nov.', 'Dec.']
-                console.log(data);
-                let li_item = document.createElement('li');
-                let date = new Date();
-                let hours = date.getHours();
-                let min = date.getMinutes()
-                let hours_short = hours;
-                let total_min = (hours*60) + min;
-                const twelve_hours = 12*60;
-                let pre_min = '';
-                if (min < 10){
-                    pre_min = '0'
-                }
-                let ampm = 'a.m.';
-                if (hours > 12){
-                    hours_short = hours - 12;
-                }
-                if (total_min > twelve_hours){
-                    ampm = 'p.m.';
-                }
-                let str_date = `${months[date.getMonth()]} ${date.getDate()}, 
-                                ${date.getFullYear()},
-                                ${hours_short}:${pre_min}${date.getMinutes()} ${ampm}`;
-                li_item.innerHTML = `(${str_date}) ${value}`;
-                let ul_elem = document.querySelector(`.comment-list-${post_id}`);
-                ul_elem.append(li_item);
-            })
-            .catch(error => {
-                console.log(error);
-            });
-        }
-    }
+function displayComments(event){
+    event.preventDefault();
+    let post_id = this.dataset.post;
+    // console.log('postid', post_id);
 
-    function displayComments(event){
-        event.preventDefault();
-        let post_id = this.dataset.post;
-        // console.log('postid', post_id);
-
-        let ul_elem = document.querySelector(`.comment-list-${post_id}`);
-        // console.log('ul elem', ul_elem);
-        if (ul_elem.classList.contains('hide-comments')) {
-            ul_elem.classList.remove('hide-comments');
-            ul_elem.classList.add('show-comments');
-        } else {
-            ul_elem.classList.remove('show-comments');
-            ul_elem.classList.add('hide-comments');
-        }
+    let ul_elem = document.querySelector(`.comment-list-${post_id}`);
+    // console.log('ul elem', ul_elem);
+    if (ul_elem.classList.contains('hide-comments')) {
+        ul_elem.classList.remove('hide-comments');
+        ul_elem.classList.add('show-comments');
+    } else {
+        ul_elem.classList.remove('show-comments');
+        ul_elem.classList.add('hide-comments');
     }
 }
 </script>

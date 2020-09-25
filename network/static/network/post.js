@@ -3,13 +3,13 @@ addEventListener('DOMContentLoaded', listeners);
     function listeners(){
 
         // processing likes and unlikes
-        let like_buttons = document.querySelectorAll('.like-btn')
+        let like_buttons = document.querySelectorAll('.like-action')
         like_buttons.forEach(button => {
             button.addEventListener('click', processLike)
         });
 
          // script for processing editing of posts
-        let edit_links = document.querySelectorAll('.edit');
+        let edit_links = document.querySelectorAll('.edit-action');
         edit_links.forEach(link => {
             link.addEventListener('click', processEdit);
         });       
@@ -58,19 +58,22 @@ addEventListener('DOMContentLoaded', listeners);
         // 'this' is the anchor 'edit' element
         let edit = this;
         let post_id = this.dataset.post;
-        // post is the 'div' next to it
         let post = document.querySelector(`.post-text-${post_id}`);
-        let post_text = post.innerHTML.replace(/(\r\n|\n|\r)/g, "").trim();
-        post.innerHTML = `<textarea rows="2" cols="100">${post_text}</textarea>`;
-        let textarea = document.querySelector('textarea');
-        textarea.addEventListener('change', () => {
-            let value = textarea.value.replace(/(\r\n|\n|\r)/g, "").trim();
-            post.innerHTML = '';
-            processTextArea(value, post, edit);
-        });
+        console.log('post before cleaning', post);
+        const post_text = post.innerHTML.replace(/(\r\n|\n|\r)/g, "").trim();
+        const textarea = document.createElement('textarea');
+        // textarea.cols = '100';
+        textarea.style.width= '100%';
+        textarea.rows = '2';
+        textarea.innerHTML = post_text;
+        post.innerHTML = '';
+        post.appendChild(textarea);
+        console.log('textarea appended', post);
+         
         textarea.addEventListener('keydown', (event) => {
             if (event.key == 'Enter' || event.key == 'Escape'){
                 let value = textarea.value.replace(/(\r\n|\n|\r)/g, "").trim();
+                console.log('value', value);
                 post.innerHTML = '';
                 processTextArea(value, post, edit);
             }

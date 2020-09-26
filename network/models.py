@@ -8,7 +8,7 @@ from dateutil import tz
 
 class User(AbstractUser):
     following = models.ManyToManyField('self', symmetrical=False, 
-                blank=True, related_name='followers')
+                blank=True)
     
     def __str__(self):
         return self.username
@@ -19,8 +19,13 @@ class User(AbstractUser):
     def following_count(self):
         return self.following.all().count()
 
+    def followers(self):
+        users = User.objects.all();
+        followers = [user for user in users if self in user.following.all()]
+        return followers
+
     def followers_count(self):
-        return self.followers.all().count()
+        return len(self.followers())
 
 
 class Post(models.Model):

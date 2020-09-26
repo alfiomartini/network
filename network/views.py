@@ -47,7 +47,7 @@ def following(request, user_id):
 def profile(request, user_id):
     post_user = User.objects.get(id=user_id)
     user_posts = Post.objects.filter(user=post_user).order_by('-date')
-    followers = post_user.followers.all()
+    followers = post_user.followers()
     following = post_user.following.all()
     context = {'followers':followers, 'following':following, 
                'post_user':post_user, 'user_posts': user_posts}

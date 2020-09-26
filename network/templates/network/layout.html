@@ -20,9 +20,12 @@
         </script>
 
         <link href="{% static 'network/styles.css' %}" rel="stylesheet">
+
+        <script src="{% static 'network/comment.js' %}" defer></script>
+        <script src="{% static 'network/getCookie.js' %}" defer></script>
+        <script src="{% static 'network/post.js' %}" defer></script>
     </head>
     <body>
-
         <nav class="navbar navbar-expand-md navbar-dark bg-dark 
                     border border-dark mr-2 ml-2">
             <a class="navbar-brand" href="{% url 'index' %}">Network</a>
@@ -34,10 +37,10 @@
             <!-- Navbar links -->
             <div class="collapse navbar-collapse" id="target">
               <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
-                  <a class="nav-link" href="{% url 'index' %}">All Posts</a>
-                </li>
                 {% if user.is_authenticated %}
+                    <li class="nav-item">
+                    <a class="nav-link" href="{% url 'index' %}">All Posts</a>
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'following' user.id %}">Following</a>
                     </li>

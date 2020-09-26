@@ -67,6 +67,16 @@ def comments(request, post_id):
     response = JsonResponse(comment_list, safe=False)
     return redirect('index')
 
+@login_required
+def delete_comment(request, post_id, comment_id):
+    if request.method == "DELETE":
+        post = Post.objects.get(id=post_id)
+        comment = Comment.objects.get(id=comment_id)
+        # print(post.post_comments.all());
+        comment.delete()
+        # print(post.post_comments.all());
+        return JsonResponse({'message': 'Success: Comment deleted'});
+
 # Post Actions
 
 @login_required
@@ -79,8 +89,14 @@ def add_comment(request, post_id):
         Comment.objects.create(text=text, to_post=post);
         comment_list = list(Comment.objects.filter(to_post=post_id))
         last_comment = comment_list[-1]
+        comment_id = last_comment.id;
+        current_user = request.user.username;
+        post_user = post.user.username;
         return JsonResponse({'message': 'Success: Comment added to post',
-                             'date': last_comment.date})
+                             'date': last_comment.date,
+                             'current_user': current_user,
+                             'post_user': post_user,
+                             'comment_id': comment_id})
 
 @login_required
 def new_post(request):

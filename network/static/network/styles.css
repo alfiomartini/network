@@ -129,6 +129,9 @@ body{
 
 /* Comments */
 
+.comment-wrapper input{
+  border: 1px solid black;
+}
 .comment-wrapper ul{
   list-style: none;
 }

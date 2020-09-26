@@ -62,7 +62,6 @@ addEventListener('DOMContentLoaded', listeners);
         console.log('post before cleaning', post);
         const post_text = post.innerHTML.replace(/(\r\n|\n|\r)/g, "").trim();
         const textarea = document.createElement('textarea');
-        // textarea.cols = '100';
         textarea.style.width= '100%';
         textarea.rows = '2';
         textarea.innerHTML = post_text;

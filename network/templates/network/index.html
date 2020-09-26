@@ -28,8 +28,9 @@
             {% endif %}
             <span class="counter" data-counter="{{post_id}}">{{post.likes_count}}</span>
         </div>
-        <div class="mb-2"><a class="edit-btn comments-action mr-2" href="#" data-post={{post.id}}>
-            Comments</a><span>{{post.comments_count}}</span>
+        <div class="mb-2"><a class="edit-btn comments-action mr-2" href="#" 
+            data-post={{post.id}}>
+            Comments</a><span class='comment-counter-{{post.id}}'>{{post.comments_count}}</span>
         </div>
 
         <div class="comment-wrapper">
@@ -38,7 +39,7 @@
                     <input type="text" class="form-control" placeholder="Comment"  aria-describedby="" name='comment' minlength="1" data-post ="{{post.id}}">
                     <div class="input-group-append">
                       <button class="btn btn-primary post-action" type="button" 
-                      data-post="{{post.id}}">Post</button>
+                      data-post="{{post.id}}" data-counter = "{{post.comments_count}}">Post</button>
                     </div>
                 </div>
             </form>
@@ -50,7 +51,8 @@
                     </li>
                     {% if post.user == request.user %}
                         <div><a class="del-btn del-action" href="#" 
-                            data-post="{{post.id}}" data-comment="{{comment.id}}">
+                            data-post="{{post.id}}" data-comment="{{comment.id}}"
+                            data-counter = "{{post.comments_count}}">
                             delete
                             </a>
                         </div>

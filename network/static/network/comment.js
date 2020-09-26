@@ -10,7 +10,7 @@ function commentListeners(){
     let post_btn = document.querySelectorAll('.post-action');
     post_btn.forEach(btn => {
         if (btn)
-            btn.addEventListener('click', commentForm);
+            btn.addEventListener('click', addComment);
     });
     let del_btn = document.querySelectorAll('.del-action');
     del_btn.forEach(btn => {
@@ -26,6 +26,8 @@ function delComment(event){
     let comment_id = this.dataset.comment;
     console.log('post_id', post_id);
     console.log('comment_id', comment_id);
+    let counter = Number(this.dataset.counter) - 1;
+    console.log('counter', counter);
     let comment = document.querySelector(`.comment-item-${post_id}-${comment_id}`);
     // console.log(comment);
     let csrftoken = getCookie('csrftoken');
@@ -45,18 +47,19 @@ function delComment(event){
         const ul_elem = document.querySelector(`.comment-list-${post_id}`);
         // console.log(ul_elem)
         ul_elem.removeChild(comment);
+        document.querySelector(`.comment-counter-${post_id}`).innerHTML = counter;
     })
     .catch(error =>{
         console.log(error);
     });
 }
 
-function commentForm(event){
+function addComment(event){
     event.preventDefault();
     let btn = this;
     console.log(btn);
     let post_id = btn.dataset.post;
-    
+    let counter = Number(this.dataset.counter) + 1;
     let input = document.querySelector(`.form-comment-${post_id} input`);
     console.log(input);
     let value = input.value;
@@ -125,6 +128,7 @@ function commentForm(event){
                 div_elem.append(div2_elem);
             } 
             ul_elem.append(div_elem);
+            document.querySelector(`.comment-counter-${post_id}`).innerHTML = counter;
         })
         .catch(error => {
             console.log(error);

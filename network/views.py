@@ -6,7 +6,7 @@ from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 import json
 from dateutil import tz
-from django.core.paginator import Paginator
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
 # Create your views here.
@@ -16,7 +16,7 @@ from .models import User, Post, Comment, PostForm, UserForm
 
 def index(request):
     if request.user.is_authenticated:
-        user = request.user
+        # user = request.user
         # print('username', user.username)
         # print('following', user.following.all())
         # print('followed by', user.followers.all())
@@ -24,6 +24,24 @@ def index(request):
         posts = Post.objects.order_by('-date').all()
         return render(request, "network/index.html", 
             {'posts':posts})
+    else:
+        return redirect('login')
+
+def index_pager(request):
+    if request.user.is_authenticated:
+        posts = Post.objects.order_by('-date').all()
+        page = request.GET.get('page', 1)
+        paginator = Paginator(posts, 5)
+        # page_posts is an instance of the Page class
+        # see: https://docs.djangoproject.com/en/3.1/ref/paginator/#django.core.paginator.Paginator
+        try:
+            page_posts = paginator.page(page)
+        except PageNotAnInteger:
+            page_posts = paginator.page(1)
+        except EmptyPage:
+            page_posts = paginator.page(paginator.num_pages)
+        return render(request, "network/index_pager.html", 
+            {'page_posts':page_posts})
     else:
         return redirect('login')
 

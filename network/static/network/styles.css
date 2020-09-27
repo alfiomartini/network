@@ -146,11 +146,11 @@ body{
   background-color: gray;
 }
 
-.hide-comments{
+.hide-comments, .hide-page{
   display: none;
 }
 
-.show-comments{
+.show-comments, .show-page{
   display: block;
 }
 

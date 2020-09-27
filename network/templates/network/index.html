@@ -12,6 +12,7 @@
         <input class="btn btn-secondary" type="submit" value="Post">
     </form>
     <h3 class="m-3">All Posts</h3>
+    
     {% for post in posts %}
     <div class="post-wrapper">
         <h5 ><a href="{% url 'profile' post.user.id %}">{{post.user}}</a></h5>

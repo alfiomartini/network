@@ -6,6 +6,7 @@ from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 import json
 from dateutil import tz
+from django.core.paginator import Paginator
 
 
 # Create your views here.
@@ -21,7 +22,8 @@ def index(request):
         # print('followed by', user.followers.all())
         # print('date joined', user.date_joined)
         posts = Post.objects.order_by('-date').all()
-        return render(request, "network/index.html", {'posts':posts})
+        return render(request, "network/index.html", 
+            {'posts':posts})
     else:
         return redirect('login')
 

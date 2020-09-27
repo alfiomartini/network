@@ -31,7 +31,7 @@ def index_pager(request):
     if request.user.is_authenticated:
         posts = Post.objects.order_by('-date').all()
         page = request.GET.get('page', 1)
-        paginator = Paginator(posts, 5)
+        paginator = Paginator(posts, 10)
         # page_posts is an instance of the Page class
         # see: https://docs.djangoproject.com/en/3.1/ref/paginator/#django.core.paginator.Paginator
         try:
@@ -60,6 +60,27 @@ def following(request, user_id):
     posts = Post.objects.filter(id__in=post_id_list).order_by('-date')
     return render(request, 'network/following.html', {'posts':posts})
 
+@login_required
+def following_pager(request, user_id):
+    user = User.objects.get(id=user_id)
+    following_users = user.following.all()
+    # post_list = [user.user_posts.all() for user in following_users]
+    # print(post_list)
+    post_id_list = []
+    for user in following_users:
+        post_ids = [post.id for post in user.user_posts.all()]
+        post_id_list += post_ids
+    posts = Post.objects.filter(id__in=post_id_list).order_by('-date')
+    paginator = Paginator(posts, 10)
+    page = request.GET.get('page', 1)
+        # see: https://docs.djangoproject.com/en/3.1/ref/paginator/#django.core.paginator.Paginator
+    try:
+        page_posts = paginator.page(page)
+    except PageNotAnInteger:
+        page_posts = paginator.page(1)
+    except EmptyPage:
+        page_posts = paginator.page(paginator.num_pages)
+    return render(request, 'network/following_pager.html', {'page_posts':page_posts})
 
 # Profile
 

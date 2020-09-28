@@ -45,7 +45,7 @@ def index_pager(request):
     else:
         return redirect('login')
 
-# Following
+# Following/Followers
 
 @login_required
 def following(request, user_id):
@@ -81,6 +81,30 @@ def following_pager(request, user_id):
     except EmptyPage:
         page_posts = paginator.page(paginator.num_pages)
     return render(request, 'network/following_pager.html', {'page_posts':page_posts})
+
+@login_required
+def followers_pager(request, user_id):
+    user = User.objects.get(id=user_id)
+    followers_user = user.followers()
+    print(user);
+    print(followers_user);
+    # post_list = [user.user_posts.all() for user in following_users]
+    # print(post_list)
+    post_id_list = []
+    for user in followers_user:
+        post_ids = [post.id for post in user.user_posts.all()]
+        post_id_list += post_ids
+    posts = Post.objects.filter(id__in=post_id_list).order_by('-date')
+    paginator = Paginator(posts, 10)
+    page = request.GET.get('page', 1)
+        # see: https://docs.djangoproject.com/en/3.1/ref/paginator/#django.core.paginator.Paginator
+    try:
+        page_posts = paginator.page(page)
+    except PageNotAnInteger:
+        page_posts = paginator.page(1)
+    except EmptyPage:
+        page_posts = paginator.page(paginator.num_pages)
+    return render(request, 'network/followers_pager.html', {'page_posts':page_posts})
 
 # Profile
 

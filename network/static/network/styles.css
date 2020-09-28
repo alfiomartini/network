@@ -27,6 +27,14 @@ body{
   border-radius: 5px;
 }
 
+.post-wrapper h5 a{
+  text-decoration: none;
+}
+
+.post-wrapper h5 a:hover{
+  text-decoration: none;
+  color: darkslategray;
+}
  /* Buttons */
 
  .like-btn{

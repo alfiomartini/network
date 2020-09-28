@@ -3,7 +3,7 @@
 {% load static %}
 
 {% block body %}
-    <h3 class="m-3">Following  Posts</h3>
+    <h3 class="m-3">Followers Posts</h3>
     {% for post in page_posts %}
     <div class="post-wrapper">
         <h5 ><a href="{% url 'profile' post.user.id %}">{{post.user}}</a></h5>

@@ -48,7 +48,7 @@
                         <a class="nav-link" href="{% url 'following' user.id %}">Following</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Followers</a>
+                        <a class="nav-link" href="{% url 'followers' user.id %}">Followers</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'logout' %}">Log Out</a>

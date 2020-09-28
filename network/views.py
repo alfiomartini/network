@@ -94,6 +94,25 @@ def profile(request, user_id):
                'post_user':post_user, 'user_posts': user_posts}
     return render(request, 'network/profile.html', context)
 
+@login_required
+def profile_pager(request, user_id):
+    post_user = User.objects.get(id=user_id)
+    user_posts = Post.objects.filter(user=post_user).order_by('-date')
+    followers = post_user.followers()
+    following = post_user.following.all()
+    paginator = Paginator(user_posts, 10)
+    page = request.GET.get('page', 1)
+        # see: https://docs.djangoproject.com/en/3.1/ref/paginator/#django.core.paginator.Paginator
+    try:
+        page_posts = paginator.page(page)
+    except PageNotAnInteger:
+        page_posts = paginator.page(1)
+    except EmptyPage:
+        page_posts = paginator.page(paginator.num_pages)
+    context = {'followers':followers, 'following':following, 
+               'post_user':post_user, 'page_posts': page_posts}
+    return render(request, 'network/profile_pager.html', context)
+
 # Post Comments
 @login_required
 def comments(request, post_id):

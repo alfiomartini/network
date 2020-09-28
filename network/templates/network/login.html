@@ -2,13 +2,13 @@
 
 {% block body %}
 
-    <h2>Login</h2>
+    <h3 class="m-3">Login</h3>
 
     {% if message %}
         <div>{{ message }}</div>
     {% endif %}
 
-    <form action="{% url 'login' %}" method="post">
+    <form action="{% url 'login' %}" method="post" class="form-auth">
         {% csrf_token %}
         <div class="form-group">
             <input autofocus class="form-control" type="text" name="username" placeholder="Username">

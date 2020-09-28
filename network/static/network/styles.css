@@ -12,7 +12,7 @@ body{
 
 /* Form New Post */
 
-#form-post{
+#form-post, .form-auth{
   margin: 10px;
   padding: 20px;
   border: 1px solid black;

@@ -80,7 +80,8 @@ def following_pager(request, user_id):
         page_posts = paginator.page(1)
     except EmptyPage:
         page_posts = paginator.page(paginator.num_pages)
-    return render(request, 'network/following_pager.html', {'page_posts':page_posts})
+    return render(request, 'network/following_pager.html', 
+       {'page_posts':page_posts, 'context_user':user})
 
 @login_required
 def followers_pager(request, user_id):
@@ -104,7 +105,8 @@ def followers_pager(request, user_id):
         page_posts = paginator.page(1)
     except EmptyPage:
         page_posts = paginator.page(paginator.num_pages)
-    return render(request, 'network/followers_pager.html', {'page_posts':page_posts})
+    return render(request, 'network/followers_pager.html', 
+      {'page_posts':page_posts, 'context_user':user})
 
 # Profile
 

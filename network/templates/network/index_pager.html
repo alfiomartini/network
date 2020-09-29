@@ -13,62 +13,65 @@
 </form>
 <h3 class="m-3">All Posts</h3>
 
-{% for post in page_posts %}
-<div class="post-wrapper">
-  <h5><a href="{% url 'profile' post.user.id %}">{{post.user}}</a></h5>
-  {% if request.user == post.user %}
-  <a href="#" class="edit-btn edit-action" data-post='{{post.id}}'>Edit</a>
-  {% endif %}
-  <div class="post-text-{{post.id}}">{{post.post_text}}</div>
-  <div>{{post.date}}</div>
-  <div>
-    {% if request.user in post.liked_by_all %}
-    <button class="like-btn like-action" id="{{post.id}}">Unlike</button>
-    {% else %}
-    <button class="like-btn like-action" id="{{post.id}}">Like</button>
+<div class="posts-container">
+  {% for post in page_posts %}
+  <div class="post-wrapper post-wrapper-{{post.id}}">
+    <h5><a href="{% url 'profile' post.user.id %}">{{post.user}}</a></h5>
+    {% if request.user == post.user %}
+    <a href="#" class="edit-btn edit-action" data-post='{{post.id}}'>Edit</a>
+    <a href="#" class="del-btn del-post-action" data-post='{{post.id}}'>Delete</a>
     {% endif %}
-    <span class="counter" data-counter="{{post_id}}">{{post.likes_count}}</span>
-  </div>
-  <div class="mb-2"><a class="edit-btn comments-action mr-2" href="#" data-post={{post.id}}>
-      Comments</a><span class='comment-counter-{{post.id}}'>{{post.comments_count}}</span>
-  </div>
+    <div class="post-text-{{post.id}}">{{post.post_text}}</div>
+    <div>{{post.date}}</div>
+    <div>
+      {% if request.user in post.liked_by_all %}
+      <button class="like-btn like-action" id="{{post.id}}">Unlike</button>
+      {% else %}
+      <button class="like-btn like-action" id="{{post.id}}">Like</button>
+      {% endif %}
+      <span class="counter" data-counter="{{post_id}}">{{post.likes_count}}</span>
+    </div>
+    <div class="mb-2"><a class="edit-btn comments-action mr-2" href="#" data-post={{post.id}}>
+        Comments</a><span class='comment-counter-{{post.id}}'>{{post.comments_count}}</span>
+    </div>
 
-  <div class="comment-wrapper">
-    <form action="" id="" method="post" class="form-comment-{{post.id}}">
-      <div class="input-group mb-3">
-        <input type="text" class="form-control" placeholder="Comment" aria-describedby="" name='comment' minlength="1"
-          data-post="{{post.id}}">
-        <div class="input-group-append">
-          <button class="btn btn-primary post-action" type="button" data-post="{{post.id}}"
-            data-counter="{{post.comments_count}}">Post</button>
+    <div class="comment-wrapper">
+      <form action="" id="" method="post" class="form-comment-{{post.id}}">
+        <div class="input-group mb-3">
+          <input type="text" class="form-control" placeholder="Comment" aria-describedby="" name='comment' minlength="1"
+            data-post="{{post.id}}">
+          <div class="input-group-append">
+            <button class="btn btn-primary post-action" type="button" data-post="{{post.id}}"
+              data-counter="{{post.comments_count}}">Post</button>
+          </div>
         </div>
-      </div>
-    </form>
-    <ul class="comment-list-{{post.id}} hide-comments">
-      {% for comment in post.comments %}
-      <div class="comment-item comment-item-{{post.id}}-{{comment.id}}">
-        <li class="">
-          <span>({{comment.new_date}} by {{comment.by_user.username}}) </span>{{comment.text}}
-        </li>
-        <!-- Post owners can delete comments made to the post 
-                         Comment authors can also delete comments -->
-        {% if post.user == request.user or comment.by_user == request.user %}
-        <div><a class="del-btn del-action" href="#" data-post="{{post.id}}" data-comment="{{comment.id}}"
-            data-counter="{{post.comments_count}}">
-            delete
-          </a>
+      </form>
+      <ul class="comment-list-{{post.id}} hide-comments">
+        {% for comment in post.comments %}
+        <div class="comment-item comment-item-{{post.id}}-{{comment.id}}">
+          <li class="">
+            <span>({{comment.new_date}} by {{comment.by_user.username}}) </span>{{comment.text}}
+          </li>
+          <!-- Post owners can delete comments made to the post 
+                          Comment authors can also delete comments -->
+          {% if post.user == request.user or comment.by_user == request.user %}
+          <div><a class="del-btn del-action" href="#" data-post="{{post.id}}" data-comment="{{comment.id}}"
+              data-counter="{{post.comments_count}}">
+              delete
+            </a>
+          </div>
+          {% else %}
+          <!-- this is just to ease formatting by flexbox -->
+          <div><a class="del-btn text-white bg-white">delete</a></div>
+          {% endif %}
         </div>
-        {% else %}
-        <!-- this is just to ease formatting by flexbox -->
-        <div><a class="del-btn text-white bg-white">delete</a></div>
-        {% endif %}
-      </div>
 
-      {% endfor %}
-    </ul>
+        {% endfor %}
+      </ul>
+    </div>
   </div>
+  {% endfor %}
 </div>
-{% endfor %}
 
 {% if page_posts.has_other_pages %}
 <ul class="pagination justify-content-center mt-3">

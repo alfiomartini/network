@@ -169,6 +169,7 @@ def comments(request, post_id):
 @login_required
 def delete_comment(request, post_id, comment_id):
     if request.method == "DELETE":
+        # not needed, as I see
         post = Post.objects.get(id=post_id)
         comment = Comment.objects.get(id=comment_id)
         # print(post.post_comments.all());
@@ -177,7 +178,6 @@ def delete_comment(request, post_id, comment_id):
         return JsonResponse({'message': 'Success: Comment deleted'})
 
 # Post Actions
-
 
 @login_required
 def add_comment(request, post_id):
@@ -211,6 +211,15 @@ def new_post(request):
         return redirect('index')
     else:
         return redirect('index')
+
+@login_required
+def delete_post(request, post_id):
+    if request.method == 'DELETE':
+        print('Hello delete post')
+        post = Post.objects.get(id=post_id)
+        print('post id', post.id)
+        post.delete()
+        return HttpResponse(f"Comment with id {post_id} deleted.")
 
 
 @login_required

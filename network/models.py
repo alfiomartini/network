@@ -7,20 +7,20 @@ from dateutil import tz
 
 
 class User(AbstractUser):
-    following = models.ManyToManyField('self', symmetrical=False, 
-                blank=True)
-    
+    following = models.ManyToManyField('self', symmetrical=False,
+                                       blank=True)
+
     def __str__(self):
         return self.username
 
     def following_all(self):
-        return self.following.all();
+        return self.following.all()
 
     def following_count(self):
         return self.following.all().count()
 
     def followers(self):
-        users = User.objects.all();
+        users = User.objects.all()
         followers = [user for user in users if self in user.following.all()]
         return followers
 
@@ -31,8 +31,10 @@ class User(AbstractUser):
 class Post(models.Model):
     id = models.AutoField(primary_key=True)
     post_text = models.CharField(max_length=500)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_posts')
-    liked_by = models.ManyToManyField(User, related_name='user_liked_posts', blank=True)
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='user_posts')
+    liked_by = models.ManyToManyField(
+        User, related_name='user_liked_posts', blank=True)
     date = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
@@ -40,7 +42,7 @@ class Post(models.Model):
 
     def likes_count(self):
         return self.liked_by.all().count()
-    
+
     def liked_by_all(self):
         return self.liked_by.all()
 
@@ -56,30 +58,40 @@ class Post(models.Model):
             comment.date = comment.date.astimezone(tz.tzlocal())
             dict['new_date'] = comment.date.astimezone(tz.tzlocal())
             dict['to_post'] = comment.to_post
-            dict['text'] = comment.text 
+            dict['by_user'] = comment.by_user
+            dict['text'] = comment.text
             comment_list.append(dict)
         # comment_list = [{'text': comment.text, 'to_post':comment.to_post,
         #                  'date': comment.date.astimezone(tz.tzlocal()),
-        #                  'id': comment.id} 
+        #                  'id': comment.id}
         #                  for comment in all_comments]
         return comment_list
 
+
 class Comment(models.Model):
     text = models.CharField(max_length=500)
-    to_post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='post_comments') 
+    to_post = models.ForeignKey(Post, on_delete=models.CASCADE,
+                                related_name='post_comments')
     date = models.DateTimeField(default=timezone.now)
+    by_user = models.ForeignKey(User, on_delete=models.CASCADE,
+                                related_name='user_comments', default=1)
 
     def __str__(self):
         return self.text[0:30]
 
+    def user_from_post(self):
+        return self.to_post.user
+
 # Form models here
+
 
 class UserForm(ModelForm):
     class Meta:
         model = User
         fields = ['username', 'password']
-        
+
+
 class PostForm(ModelForm):
     class Meta:
-        model = Post 
+        model = Post
         fields = ['post_text']

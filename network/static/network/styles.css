@@ -100,7 +100,7 @@ body{
   text-decoration: none;
   color:whitesmoke;
   font-size: 12px;
-  background-color: blue;
+  background-color:red;
   padding: 4px 12px;
   border: none;
   border-radius: 5px;
@@ -110,7 +110,7 @@ body{
 }
 
 .del-btn:hover{
-  background-color: darkblue;
+  background-color: orange;
   color: whitesmoke;
   text-decoration: none;
 } 
@@ -166,7 +166,7 @@ body{
   display: flex;
   flex-direction: row;
   justify-content: space-around;
-  align-items: center;
+  align-items: baseline;
 }
 
 .comment-item li{

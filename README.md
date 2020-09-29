@@ -1,4 +1,3 @@
 # Abstract
 
-This application is a Twitter-like social network for making posts and following users. It is implemented with HTML, CSS, JavaScript, Bootstrap, Python, Django and the SQLite database. Signed in users can write new text-based posts, edit and delete their own posts, comment on posts written by others and delete any comment
-written by themselves as well.
+This application is a Twitter-like social network for making posts and following users. It is implemented with _HTML_, _CSS_, _JavaScript_, _Bootstrap_, _Python_, _Django_ and the _SQLite_ database. Signed in users can _write_ new text-based posts, _edit_ and _delete_ their own posts, _like_ or _unlike_ posts,  _comment_ on posts,  and _delete_ any comment written by themselves as well. Through the navbar, the user can access all posts from all users, its profile page, posts from followers, and posts from users that he or she is following as well. All pages use a basic pagination technique that limits the number of posts that are displayed (10).

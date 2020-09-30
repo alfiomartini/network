@@ -97,6 +97,7 @@ function processLike() {
 function processEdit(event) {
     event.preventDefault();
     // 'this' is the anchor 'edit' element
+    this.removeEventListener('click', processEdit);
     let edit = this;
     let post_id = this.dataset.post;
     let post = document.querySelector(`.post-text-${post_id}`);
@@ -116,6 +117,7 @@ function processEdit(event) {
             console.log('value', value);
             post.innerHTML = '';
             processTextArea(value, post, edit);
+            edit.addEventListener('click', processEdit);
         }
     });
 }

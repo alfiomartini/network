@@ -21,7 +21,7 @@
     <a href="#" class="edit-btn edit-action" data-post='{{post.id}}'>Edit</a>
     <a href="#" class="del-btn del-post-action" data-post='{{post.id}}'>Delete</a>
     {% endif %}
-    <div class="post-text-{{post.id}}">{{post.post_text}}</div>
+    <div class="post-text-{{post.id}} post-text">{{post.post_text}}</div>
     <div>{{post.date}}</div>
     <div>
       {% if request.user in post.liked_by_all %}
@@ -36,7 +36,7 @@
     </div>
 
     <div class="comment-wrapper">
-      <form action="" id="" method="post" class="form-comment-{{post.id}}">
+      <form action=""  method="post" class="form-comment-{{post.id}}">
         <div class="input-group mb-3">
           <input type="text" class="form-control" placeholder="Comment" aria-describedby="" name='comment' minlength="1"
             data-post="{{post.id}}">

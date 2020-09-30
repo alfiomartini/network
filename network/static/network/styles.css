@@ -27,6 +27,10 @@ body{
   border-radius: 5px;
 }
 
+.post-wrapper .post-text{
+  word-wrap: break-word;
+}
+
 .post-wrapper h5 a{
   text-decoration: none;
 }

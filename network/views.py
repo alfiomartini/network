@@ -175,9 +175,12 @@ def delete_comment(request, post_id, comment_id):
         # print(post.post_comments.all());
         comment.delete()
         # print(post.post_comments.all());
-        return JsonResponse({'message': 'Success: Comment deleted'})
+        new_comments = Comment.objects.filter(to_post=post_id)
+        return JsonResponse({'message': 'Success: Comment deleted',
+                             'count': new_comments.count()})
 
 # Post Actions
+
 
 @login_required
 def add_comment(request, post_id):
@@ -211,6 +214,7 @@ def new_post(request):
         return redirect('index')
     else:
         return redirect('index')
+
 
 @login_required
 def delete_post(request, post_id):

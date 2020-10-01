@@ -1,23 +1,18 @@
-{% extends 'network/layout.html' %}
-
-{% load static %}
-
-{% block body %}
+{% extends 'network/layout.html' %} {% load static %} {% block body %}
 <div class="user-data">
   <h4 class="m-3">{{post_user.username}}</h4>
-  {% if post_user != request.user %}
-  {% if post_user in request.user.following_all %}
+  {% if post_user != request.user %} {% if post_user in
+  request.user.following_all %}
   <a class="follow-btn" href="#" id="{{post_user.id}}">Unfollow</a>
   {% else %}
   <a class="follow-btn" href="#" id="{{post_user.id}}">Follow</a>
-  {% endif %}
-  {% endif %}
-  <div class=" ml-3">Joined {{post_user.date_joined}}</div>
+  {% endif %} {% endif %}
+  <div class="ml-3">Joined {{post_user.date_joined}}</div>
   <p class="ml-3">
-    <span class="user-network ">Following
-    </span>
+    <span class="user-network">Following </span>
     {{post_user.following_count}}
-    <span class="user-network  ml-3">Followers </span> {{post_user.followers_count}}
+    <span class="user-network ml-3">Followers </span>
+    {{post_user.followers_count}}
   </p>
 </div>
 
@@ -26,8 +21,10 @@
   <div class="post-wrapper post-wrapper-{{post.id}}">
     <h5><a href="{% url 'profile' post.user.id %}">{{post.user}}</a></h5>
     {% if request.user == post.user %}
-    <a href="#" class="edit-btn edit-action" data-post='{{post.id}}'>Edit</a>
-    <a href="#" class="del-btn del-post-action" data-post='{{post.id}}'>Delete</a>
+    <a href="#" class="edit-btn edit-action" data-post="{{post.id}}">Edit</a>
+    <a href="#" class="del-btn del-post-action" data-post="{{post.id}}"
+      >Delete</a
+    >
     {% endif %}
     <div class="post-text-{{post.id}} post-text">{{post.post_text}}</div>
     <div>{{post.date}}</div>
@@ -37,20 +34,37 @@
       {% else %}
       <button class="like-btn like-action" id="{{post.id}}">Like</button>
       {% endif %}
-      <span class="counter" data-counter="{{post_id}}">{{post.likes_count}}</span>
+      <span class="counter" data-counter="{{post_id}}"
+        >{{post.likes_count}}</span
+      >
     </div>
-    <div class="mb-2"><a class="edit-btn comments-action mr-2" href="#" data-post={{post.id}}>
-        Comments</a><span class='comment-counter-{{post.id}}'>{{post.comments_count}}</span>
+    <div class="mb-2">
+      <a class="edit-btn comments-action mr-2" href="#" data-post="{{post.id}}">
+        Comments</a
+      ><span class="comment-counter-{{post.id}}">{{post.comments_count}}</span>
     </div>
 
     <div class="comment-wrapper">
-      <form action=""  method="post" class="form-comment-{{post.id}}">
+      <form class="form-comment-{{post.id}}">
         <div class="input-group mb-3">
-          <input type="text" class="form-control" placeholder="Comment" aria-describedby="" name='comment' minlength="1"
-            data-post="{{post.id}}">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Comment"
+            aria-describedby=""
+            name="comment"
+            minlength="1"
+            data-post="{{post.id}}"
+          />
           <div class="input-group-append">
-            <button class="btn btn-primary post-action" type="button" data-post="{{post.id}}"
-              data-counter="{{post.comments_count}}">Post</button>
+            <button
+              class="btn btn-primary post-action"
+              type="button"
+              data-post="{{post.id}}"
+              data-counter="{{post.comments_count}}"
+            >
+              Post
+            </button>
           </div>
         </div>
       </form>
@@ -58,13 +72,20 @@
         {% for comment in post.comments %}
         <div class="comment-item comment-item-{{post.id}}-{{comment.id}}">
           <li class="">
-            <span>({{comment.new_date}} by {{comment.by_user.username}}) </span>{{comment.text}}
+            <span>({{comment.new_date}} by {{comment.by_user.username}}) </span
+            >{{comment.text}}
           </li>
           <!-- Post owners can delete comments made to the post 
                           Comment authors can also delete comments -->
           {% if post.user == request.user or comment.by_user == request.user %}
-          <div><a class="del-btn del-action" href="#" data-post="{{post.id}}" data-comment="{{comment.id}}"
-              data-counter="{{post.comments_count}}">
+          <div>
+            <a
+              class="del-btn del-action"
+              href="#"
+              data-post="{{post.id}}"
+              data-comment="{{comment.id}}"
+              data-counter="{{post.comments_count}}"
+            >
               delete
             </a>
           </div>
@@ -85,76 +106,75 @@
 <ul class="pagination justify-content-center mt-3">
   {% if page_posts.has_previous %}
   <li class="page-item">
-    <a class="page-link" href="?page={{page_posts.previous_page_number }}">Previous
+    <a class="page-link" href="?page={{page_posts.previous_page_number }}"
+      >Previous
     </a>
   </li>
   {% else %}
   <li class="page-item disabled"><span class="page-link">Previous</span></li>
-  {% endif %}
-  {% for i in page_posts.paginator.page_range %}
-  {% if page_posts.number == i %}
+  {% endif %} {% for i in page_posts.paginator.page_range %} {% if
+  page_posts.number == i %}
   <li class="page-item active"><span class="page-link">{{ i }}</span></li>
   {% else %}
-  <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
-  {% endif %}
-  {% endfor %}
-  {% if page_posts.has_next %}
-  <li class="page-item"><a class="page-link" href="?page={{ page_posts.next_page_number }}">Next
+  <li class="page-item">
+    <a class="page-link" href="?page={{ i }}">{{ i }}</a>
+  </li>
+  {% endif %} {% endfor %} {% if page_posts.has_next %}
+  <li class="page-item">
+    <a class="page-link" href="?page={{ page_posts.next_page_number }}"
+      >Next
     </a>
   </li>
   {% else %}
-  <li class="page-item" class="disabled"><span class="page-link">Next</span></li>
+  <li class="page-item" class="disabled">
+    <span class="page-link">Next</span>
+  </li>
   {% endif %}
 </ul>
-{% endif %}
-{% endblock %}
-
-{% block scripts %}
+{% endif %} {% endblock %} {% block scripts %}
 <script src="{% static 'network/getCookie.js' %}"></script>
 <script>
-  addEventListener('DOMContentLoaded', listeners);
+  addEventListener("DOMContentLoaded", listeners);
 
   function listeners() {
-
     // processing likes and unlikes
-    let follow_btn = document.querySelector('.follow-btn')
+    let follow_btn = document.querySelector(".follow-btn");
     if (follow_btn) {
-      follow_btn.addEventListener('click', processFollow);
+      follow_btn.addEventListener("click", processFollow);
     }
   }
 
   function processFollow() {
     let button = this;
     let action = button.innerHTML;
-    let user_id = button.id
+    let user_id = button.id;
     console.log(action);
-    console.log(user_id)
+    console.log(user_id);
     // update database
-    let csrftoken = getCookie('csrftoken');
+    let csrftoken = getCookie("csrftoken");
     fetch(`/update/user/${user_id}/follow`, {
-      method: 'PUT',
+      method: "PUT",
       headers: {
         "X-CSRFToken": csrftoken,
-        "Accept": "application/json",
-        "Content-Type": "application/json"
+        Accept: "application/json",
+        "Content-Type": "application/json",
       },
-      credentials: 'same-origin',
-      body: JSON.stringify({ action: action })
+      credentials: "same-origin",
+      body: JSON.stringify({ action: action }),
     })
-      .then(response => {
+      .then((response) => {
         // console.log(response.status);
-        if (action === 'Unfollow') {
-          button.innerHTML = 'Follow';
-        }
-        else {
-          button.innerHTML = 'Unfollow';
+        if (action === "Unfollow") {
+          button.innerHTML = "Follow";
+        } else {
+          button.innerHTML = "Unfollow";
         }
         return response.text();
       })
-      .then(data => {
+      .then((data) => {
         console.log(data);
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   }

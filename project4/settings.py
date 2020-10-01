@@ -20,7 +20,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'm!8#-m(@1_^m0sv^z59r1jtt#ii)gnw^1$%x!h^opw9&)oal(+'
+SECRET_KEY = os.environ.get('NETWORK_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -52,7 +52,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'project4.urls'
 
-# needef for extending User model 
+# needef for extending User model
 # see: https://simpleisbetterthancomplex.com/tutorial/2016/07/22/how-to-extend-django-user-model.html#abstractbaseuser
 
 AUTH_USER_MODEL = 'network.User'

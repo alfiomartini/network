@@ -15,6 +15,11 @@ function commentListeners() {
         if (event.key == "Enter" || event.key == "Escape") {
           //   console.log("Hello enter key");
           event.preventDefault();
+          let div_elem = elem.nextElementSibling;
+          //   console.log("div elem", div_elem);
+          let btn_elem = div_elem.firstElementChild;
+          //   console.log("btn elem", btn_elem);
+          addComment.bind(btn_elem)(event);
         }
       });
     }

@@ -28,10 +28,12 @@ def index(request):
         return redirect('login')
 
 
+def readme(request):
+    return render(request, 'network/readme.html', {})
+
+
 def index_pager(request):
     if request.user.is_authenticated:
-        user1 = User.objects.get(id=1)
-        print('user 1', user1)
         posts = Post.objects.order_by('-date').all()
         page = request.GET.get('page', 1)
         paginator = Paginator(posts, 10)

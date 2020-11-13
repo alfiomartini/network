@@ -2,6 +2,8 @@
 
 {% load static %}
 
+{% block title %} Index {% endblock %}
+
 {% block body %}
 <form action="{% url 'new_post' %}" id='form-post' class="mt-3" method="POST">
   {% csrf_token %}

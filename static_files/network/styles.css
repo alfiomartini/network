@@ -4,15 +4,42 @@
   margin: 0;
 }
 
-body{
+body {
   padding: 20px;
 }
 
 /* Navbar */
 
+.navbar .dropdown .dropdown-menu {
+  background-color: #212529 !important;
+}
+
+.navbar .dropdown .dropdown-menu a:hover {
+  color: black !important;
+  background-color: whitesmoke !important;
+}
+
+/* Readme */
+
+.readme {
+  background-color: #343a40;
+  color: whitesmoke;
+  padding: 10px 20px;
+  font-family: Arial, Helvetica, sans-serif;
+  text-align: justify;
+  width: 60%;
+  margin: 50px auto;
+  margin-bottom: 20px;
+}
+
+.readme a {
+  color: lightgreen;
+}
+
 /* Form New Post */
 
-#form-post, .form-auth{
+#form-post,
+.form-auth {
   margin: 10px;
   padding: 20px;
   border: 1px solid black;
@@ -20,50 +47,50 @@ body{
 }
 /* Posts */
 
-.post-wrapper{
+.post-wrapper {
   margin: 10px;
   padding: 20px;
   border: 1px solid black;
   border-radius: 5px;
 }
 
-.post-wrapper .post-text{
+.post-wrapper .post-text {
   word-wrap: break-word;
 }
 
-.post-wrapper h5 a{
+.post-wrapper h5 a {
   text-decoration: none;
 }
 
-.post-wrapper h5 a:hover{
+.post-wrapper h5 a:hover {
   text-decoration: none;
   color: darkslategray;
 }
- /* Buttons */
+/* Buttons */
 
- .like-btn{
+.like-btn {
   display: inline-block;
   text-decoration: none;
-  color:whitesmoke;
+  color: whitesmoke;
   font-size: 12px;
   background-color: blue;
   padding: 4px 12px;
   border: none;
   border-radius: 5px;
   margin-bottom: 10px;
-  margin-top:10px;
-  margin-right:5px;
+  margin-top: 10px;
+  margin-right: 5px;
 }
 
-.like-btn:hover{
+.like-btn:hover {
   background-color: darkblue;
   color: whitesmoke;
   text-decoration: none;
-} 
+}
 
-.edit-btn{
+.edit-btn {
   margin-top: 10px;
-  margin-bottom:5px;
+  margin-bottom: 5px;
   display: inline-block;
   text-decoration: none;
   color: whitesmoke;
@@ -74,15 +101,15 @@ body{
   border-radius: 5px;
 }
 
-.edit-btn:hover{
+.edit-btn:hover {
   background-color: navy;
   color: whitesmoke;
   text-decoration: none;
-} 
+}
 
-.follow-btn{
+.follow-btn {
   margin-top: 10px;
-  margin-bottom:5px;
+  margin-bottom: 5px;
   display: inline-block;
   text-decoration: none;
   color: whitesmoke;
@@ -93,62 +120,62 @@ body{
   border-radius: 5px;
 }
 
-.follow-btn:hover{
+.follow-btn:hover {
   background-color: navy;
   color: whitesmoke;
   text-decoration: none;
 }
 
-.del-btn{
+.del-btn {
   display: inline-block;
   text-decoration: none;
-  color:whitesmoke;
+  color: whitesmoke;
   font-size: 12px;
-  background-color:red;
+  background-color: red;
   padding: 4px 12px;
   border: none;
   border-radius: 5px;
   margin-bottom: 10px;
-  margin-top:10px;
-  margin-right:5px;
+  margin-top: 10px;
+  margin-right: 5px;
 }
 
-.del-btn:hover{
+.del-btn:hover {
   background-color: orange;
   color: whitesmoke;
   text-decoration: none;
-} 
+}
 
 /* Profile Page */
 
-.user-data{
+.user-data {
   border: 1px solid black;
-  margin:10px;
+  margin: 10px;
   padding: 20px;
   background-color: #7f5a83;
   background-image: linear-gradient(315deg, #7f5a83 0%, #0d324d 74%);
   color: whitesmoke;
   font-variant: small-caps;
 }
-.user-data h4{
+.user-data h4 {
   font-family: Arial, Helvetica, sans-serif;
   display: inline-block;
 }
 
-.users-list{
+.users-list {
   padding: 20px;
 }
 
 /* Comments */
 
-.comment-wrapper input{
+.comment-wrapper input {
   border: 1px solid black;
 }
-.comment-wrapper ul{
+.comment-wrapper ul {
   list-style: none;
 }
 
-.comment-wrapper li{
+.comment-wrapper li {
   padding: 10px;
   margin-bottom: 10px;
   font-size: 14px;
@@ -158,22 +185,24 @@ body{
   background-color: gray;
 }
 
-.hide-comments, .hide-page{
+.hide-comments,
+.hide-page {
   display: none;
 }
 
-.show-comments, .show-page{
+.show-comments,
+.show-page {
   display: block;
 }
 
-.comment-item{
+.comment-item {
   display: flex;
   flex-direction: row;
   justify-content: space-around;
   align-items: baseline;
 }
 
-.comment-item li{
+.comment-item li {
   width: 90%;
   margin-right: 10px;
   max-height: 60px;
@@ -181,6 +210,12 @@ body{
 }
 
 /* Media Queries */
+
+@media (max-width: 750px) {
+  .readme {
+    width: 85%;
+  }
+}
 
 /* @media (max-width:500px){
   .post-wrapper{

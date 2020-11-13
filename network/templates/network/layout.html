@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>{% block title %}Social Network{% endblock %}</title>
+        <title>Network - {% block title %}{% endblock %}</title>
 
          <!-- Latest compiled and minified CSS -->
          <link rel="stylesheet" 
@@ -20,6 +20,7 @@
         </script>
 
         <link href="{% static 'network/styles.css' %}" rel="stylesheet">
+        <link rel="icon" href="{% static 'network/favicon.ico' %}">
 
         <script src="{% static 'network/comment.js' %}" defer></script>
         <script src="{% static 'network/getCookie.js' %}" defer></script>
@@ -41,9 +42,9 @@
                     <li class="nav-item">
                     <a class="nav-link" href="{% url 'index' %}">All Posts</a>
                     </li>
-                    <li class="nav-item">
+                    <!-- <li class="nav-item">
                         <a class="nav-link" href="{% url 'profile' user.id %}">Home</a>
-                    </li>
+                    </li> -->
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'following' user.id %}">Following</a>
                     </li>
@@ -53,6 +54,25 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'logout' %}">Log Out</a>
                     </li>
+                    <li class = "nav-item dropdown"> 
+                        <a  class="nav-link dropdown-toggle"  href="#"
+                            id="navbardrop" data-toggle="dropdown"> 
+                            <span data-toggle='tooltip' title="Code/Readme" data-placement='bottom'>
+                                About
+                            </span></a>
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="dropAbout">
+                            <a class="dropdown-item text-white" href="https://alfiomartini.github.io/"
+                             target="_blank">Github Page</a>
+                            <a class="dropdown-item text-white" 
+                               href="https://github.com/alfiomartini/network" target="_blank">
+                               Source Code
+                            </a>
+                            <a class="dropdown-item text-white" href="{% url 'readme' %}">Readme</a>
+                            <a class="dropdown-item text-white" href="https://youtu.be/Iw0t2QbVPIQ" 
+                              target="_blank">Watch me</a>
+                        </div>
+                      </li>
                 {% else %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'login' %}">Log In</a>
